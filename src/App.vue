@@ -1,17 +1,33 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="column is-half is-offset-one-quarter">
+      <div v-for="(pokemon, index) in pokemons" :key="index">
+      <Pokemon :name="pokemon.name" :url="pokemon.url"/>
+    </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
+import Pokemon from './components/Pokemon';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Pokemon
+  },
+  data() {
+    return {
+      pokemons: []
+    }
+  },
+  created: function() {
+    axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0')
+      .then(resolve => {
+        this.pokemons = resolve.data.results;
+        console.log(this.pokemons)
+      })
   }
 }
 </script>
